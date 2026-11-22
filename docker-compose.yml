@@ -1,47 +1,54 @@
 services:
-
   postgres:
     image: postgres:15
     container_name: event-booking-postgres
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: eventdb
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-
-    ports:
-      - "5432:5432"
-
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d eventdb"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-
   redis:
     image: redis:8
     container_name: event-booking-redis
     restart: unless-stopped
-
-    ports:
-      - "6379:6379"
-
     volumes:
       - redis_data:/data
-
     command: redis-server --appendonly yes
-
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
 
+  app:
+    build: .
+    container_name: event-booking-app
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/eventdb
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      DISABLE_EMAIL: ${DISABLE_EMAIL:-true}
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   postgres_data:
