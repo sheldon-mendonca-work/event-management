@@ -14,17 +14,19 @@ Emails can be sent as in the [image here](https://github.com/sheldon-mendonca-wo
 
 The booking API was stress-tested using **k6** with increasing concurrent Virtual Users (VUs).
 
-| Concurrent VUs | Throughput |  p95 Latency | Unexpected Failures |
-| -------------: | ---------: | -----------: | ------------------: |
-|              5 | ~503 req/s |  **12.5 ms** |                  0% |
-|             10 |  ~86 req/s | **134.5 ms** |                  0% |
-|             25 |  ~71 req/s |   **279 ms** |                  0% |
-|             50 |  ~62 req/s |   **507 ms** |                  0% |
-|            100 |  ~57 req/s |   **1.18 s** |                  0% |
+| Concurrent VUs | Successful Bookings | Throughput (bookings/s) | p95 Latency | Unexpected Failures |
+|---------------:|--------------------:|-----------------------:|------------:|--------------------:|
+| 10             | 1,022               | 78.96                  | 221.53 ms   | 0%                  |
+| 25             | 1,571               | 108.07                 | 241.67 ms   | 0%                  |
+| 50             | 1,859               | 99.60                  | 378.39 ms   | 0%                  |
+| 100            | 2,319               | 124.46                 | 546.34 ms   | 0%                  |
+| 200            | 2,653               | 140.29                 | 986.96 ms   | 0%                  |
+| 500            | 3,195               | 162.46                 | 2.67 s      | 0%                  |
+| 1,000          | 3,670               | 173.01                 | 4.52 s      | 0%                  |
 
 ### Baseline finding
 
-At **100 concurrent VUs**, p95 latency crossed the configured **1 second** threshold.
+At **500 concurrent VUs**, p95 latency crossed the configured **1 second** threshold.
 
 Importantly, the system remained functionally correct throughout the test:
 
@@ -265,11 +267,11 @@ Higher waiting time
 Higher p95 latency
 ```
 
-At 100 VUs:
+At 500 VUs:
 
 ```text
-~57 req/s
-1.18 s p95
+~162 req/s
+2.67 s p95
 0% unexpected failures
 ```
 
