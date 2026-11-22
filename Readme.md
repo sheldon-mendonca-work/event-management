@@ -4,9 +4,9 @@ Production-oriented backend for an event booking platform supporting **Event Org
 
 **Stack:** Java · Spring Boot · PostgreSQL · Redis · JWT · Resend · Docker · k6
 
-For metrics checkout [here](https://github.com/sheldon-mendonca-work/booking/tree/master/load-test)
+For metrics checkout [here](https://github.com/sheldon-mendonca-work/event-management/tree/master/load-test)
 
-Emails can be sent as in the [image here](https://github.com/sheldon-mendonca-work/booking/blob/master/Email_sent.png) but not included in load test due to limits
+Emails can be sent as in the [image here](https://github.com/sheldon-mendonca-work/event-management/blob/master/Email_sent.png) but not included in load test due to limits
 
 ---
 
